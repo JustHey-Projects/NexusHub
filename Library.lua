@@ -4593,37 +4593,41 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 			Callback = function() end;
 		});
 
-		local DaTabarser = function(value)
-			if not value then return ''; end;
-
-			local Out;
-
-			if typeof(value) == 'table' then
+		local function DaTabarser(value)
+			if not value then return "" end
+		
+			if typeof(value) == "table" then
+				local result = {}
+		
+				-- Case: array of selected values
 				if #value > 0 then
-					local x = {};
-
-					for i,v in next , value do
-						table.insert(x , tostring(v))
-					end;
-
-					Out = table.concat(x,' , ');
+					for _, v in ipairs(value) do
+						table.insert(result, tostring(v))
+					end
 				else
-					local x = {};
-
-					for i,v in next , value do
+					-- Case: dictionary style {["Item 1"] = true}
+					for k, v in pairs(value) do
 						if v == true then
-							table.insert(x , tostring(i));
-						end			
-					end;
-
-					Out = table.concat(x,' , ');
-				end;
+							table.insert(result, tostring(k))
+						end
+					end
+				end
+		
+				-- Shorten output if too many
+				local maxShown = 2 -- show first 2
+				if #result > maxShown then
+					local shown = {unpack(result, 1, maxShown)}
+					table.insert(shown, "+ " .. tostring(#result - maxShown) .. " more")
+					return table.concat(shown, " , ")
+				else
+					return table.concat(result, " , ")
+				end
 			else
-				Out = tostring(value);
-			end;
+				-- Single value
+				return tostring(value)
+			end
+		end
 
-			return Out;
-		end;
 
 		local Dropdown = Instance.new("Frame")
 		local BlockText = Instance.new("TextLabel")
