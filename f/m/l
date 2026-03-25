@@ -103,7 +103,7 @@ local asset_mgr = {
 }
 
 local gameIdToURL = {
-    ["6718454990"] = "8995bba363f8bf749c61c26d8dbc730e",
+    ["6718454990"] = "24e2610d255924552394b5158575882c",
 }
 
 local Config = {
